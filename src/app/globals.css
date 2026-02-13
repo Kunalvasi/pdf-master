@@ -1,0 +1,53 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 33% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --primary: 201 96% 40%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 213 27% 93%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 213 27% 93%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 171 67% 44%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 32% 88%;
+  --input: 214 32% 88%;
+  --ring: 201 96% 40%;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: 222 47% 8%;
+  --foreground: 210 40% 98%;
+  --card: 223 39% 12%;
+  --card-foreground: 210 40% 98%;
+  --primary: 196 100% 50%;
+  --primary-foreground: 222 47% 10%;
+  --secondary: 222 32% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 222 32% 17%;
+  --muted-foreground: 215 20% 72%;
+  --accent: 171 67% 46%;
+  --accent-foreground: 222 47% 10%;
+  --border: 223 20% 24%;
+  --input: 223 20% 24%;
+  --ring: 196 100% 50%;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 8% 20%, rgba(56, 189, 248, 0.15), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(20, 184, 166, 0.18), transparent 32%);
+}
+
+.glass {
+  @apply border border-white/25 bg-white/55 backdrop-blur-xl shadow-glow dark:border-white/10 dark:bg-slate-900/55;
+}
