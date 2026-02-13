@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { ArrowRight, Lock, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, History, Sparkles, Zap } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const features = [
   { title: "Merge PDFs", desc: "Drag, reorder, and combine files in one click.", icon: Sparkles },
   { title: "Compress Files", desc: "Reduce output size and compare before/after instantly.", icon: Zap },
-  { title: "Private Storage", desc: "JWT auth, owner-only access, and 24-hour auto cleanup.", icon: Lock }
+  { title: "File History", desc: "Track recent outputs with auto-cleanup after 24 hours.", icon: History }
 ];
 
 export default function HomePage() {
@@ -21,7 +21,7 @@ export default function HomePage() {
             Merge, compress, and convert with a clean workflow, secure storage, and downloadable outputs in seconds.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild size="lg"><Link href="/signup">Get Started</Link></Button>
+            <Button asChild size="lg"><Link href="/merge">Get Started</Link></Button>
             <Button asChild variant="outline" size="lg"><Link href="/merge">Try Merge Tool <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
           </div>
         </FadeIn>
@@ -41,3 +41,4 @@ export default function HomePage() {
     </div>
   );
 }
+

@@ -2,7 +2,7 @@
 
 const fileSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, required: true, ref: "User", index: true },
+    userId: { type: String, required: false, index: true },
     tool: { type: String, enum: ["merge", "compress", "pdf-to-word"], required: true },
     originalName: { type: String, required: true },
     outputName: { type: String, required: true },

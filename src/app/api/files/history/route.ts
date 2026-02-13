@@ -1,7 +1,6 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { connectDb } from "@/lib/db/mongoose";
 import { FileRecord } from "@/lib/db/models/file-record";
-import { getUserFromRequest, unauthorized } from "@/lib/auth/request";
 
 type HistoryDoc = {
   _id: string;
@@ -14,12 +13,9 @@ type HistoryDoc = {
   expiresAt: string;
 };
 
-export async function GET(request: NextRequest) {
-  const user = await getUserFromRequest(request);
-  if (!user) return unauthorized();
-
+export async function GET() {
   await connectDb();
-  const files = await FileRecord.find({ userId: user.userId })
+  const files = await FileRecord.find({})
     .sort({ createdAt: -1 })
     .limit(50)
     .lean<HistoryDoc[]>();

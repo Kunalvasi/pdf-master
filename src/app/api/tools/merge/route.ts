@@ -2,7 +2,7 @@
 import { randomUUID } from "crypto";
 import { connectDb } from "@/lib/db/mongoose";
 import { FileRecord } from "@/lib/db/models/file-record";
-import { getUserFromRequest, getMaxUploadBytes, tooLarge, unauthorized } from "@/lib/auth/request";
+import { getMaxUploadBytes, tooLarge } from "@/lib/auth/request";
 import { mergePdfBuffers } from "@/lib/pdf/processor";
 import { uploadPrivateFile } from "@/lib/storage/cloudinary";
 import { rateLimit } from "@/lib/rate-limit/memory";
@@ -12,10 +12,7 @@ function clientKey(req: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getUserFromRequest(request);
-  if (!user) return unauthorized();
-
-  const rl = rateLimit(`${user.userId}:${clientKey(request)}:merge`, 20, 60_000);
+  const rl = rateLimit(`${clientKey(request)}:merge`, 20, 60_000);
   if (!rl.allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
   const formData = await request.formData();
@@ -24,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   const maxSize = getMaxUploadBytes();
   if (files.some((f) => f.size > maxSize)) return tooLarge();
-  if (files.some((f) => f.type !== "application/pdf")) {
+  if (files.some((f) => !(f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")))) {
     return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
   }
 
@@ -35,12 +32,11 @@ export async function POST(request: NextRequest) {
   const uploaded = await uploadPrivateFile({
     buffer: merged,
     filename: `${randomUUID()}.pdf`,
-    folder: `pdfmaster/${user.userId}/merge`
+    folder: "pdfmaster/public/merge"
   });
 
   await connectDb();
   const record = await FileRecord.create({
-    userId: user.userId,
     tool: "merge",
     originalName: files.map((f) => f.name).join(", "),
     outputName,

@@ -1,26 +1,21 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "@/lib/db/mongoose";
 import { FileRecord } from "@/lib/db/models/file-record";
-import { getUserFromRequest, unauthorized } from "@/lib/auth/request";
 import { getPrivateDownloadUrl } from "@/lib/storage/cloudinary";
 
 type Params = { params: { id: string } };
 
 type FileDoc = {
-  userId: string;
   outputName: string;
   contentType: string;
   cloudinaryPublicId: string;
   cloudinaryVersion: string;
 };
 
-export async function GET(request: NextRequest, { params }: Params) {
-  const user = await getUserFromRequest(request);
-  if (!user) return unauthorized();
-
+export async function GET(_request: NextRequest, { params }: Params) {
   await connectDb();
   const file = await FileRecord.findById(params.id).lean<FileDoc | null>();
-  if (!file || String(file.userId) !== user.userId) {
+  if (!file) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -44,4 +39,3 @@ export async function GET(request: NextRequest, { params }: Params) {
     }
   });
 }
-
